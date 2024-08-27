@@ -1,0 +1,60 @@
+CREATE DATABASE FBH
+
+USE FBH
+
+CREATE TABLE Times (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nome NVARCHAR(100) NOT NULL,
+    cidade NVARCHAR(100) NOT NULL,
+    treinador_id INT,
+    FOREIGN KEY (treinador_id) REFERENCES Treinador(id)
+);
+
+CREATE TABLE Treinador (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nome NVARCHAR(100) NOT NULL,
+    data_nascimento DATE,
+    experiencia INT
+);
+
+CREATE TABLE Jogador (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nome NVARCHAR(100) NOT NULL,
+    data_nascimento DATE,
+    posicao NVARCHAR(50),
+    numero_camisa INT,
+    time_id INT,
+    FOREIGN KEY (time_id) REFERENCES Times(id)
+);
+
+CREATE TABLE Partidas (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    time_casa_id INT,
+    time_fora_id INT,
+    data_jogo DATETIME,
+    local NVARCHAR(100),
+    placar_time_casa INT,
+    placar_time_fora INT,
+    FOREIGN KEY (time_casa_id) REFERENCES Times(id),
+    FOREIGN KEY (time_fora_id) REFERENCES Times(id)
+);
+
+CREATE TABLE CalendarioJogos (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    jogo_id INT,
+    data_agendada DATETIME,
+    status NVARCHAR(50),
+    FOREIGN KEY (jogo_id) REFERENCES Partidas(id)
+);
+
+CREATE TABLE Estatistico (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    jogo_id INT,
+    jogador_id INT,
+    gols INT,
+    assistencias INT,
+    cartoes_amarelos INT,
+    cartoes_vermelhos INT,
+    FOREIGN KEY (jogo_id) REFERENCES Partidas(id),
+    FOREIGN KEY (jogador_id) REFERENCES Jogador(id)
+);
